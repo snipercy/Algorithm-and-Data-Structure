@@ -3,7 +3,7 @@
 
 #include<iostream>
 #include<string>
-#include<cstring>sssss
+#include<cstring>
 #include<iomanip>
 
 
