@@ -9,9 +9,7 @@ int main(){
     bool find_first = false;
 
     int i;
-    for(i = 0; i < 10; i++)
-    {
-        cin >> arr[i];
+    for(i = 0
 
         // find the smallest number, skip '0'
         if(i != 0 && arr[i] != 0 && find_first == false)
@@ -34,3 +32,4 @@ int main(){
 
     return 0;
 }
+    
