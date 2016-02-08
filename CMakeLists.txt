@@ -3,4 +3,4 @@ project(PAT)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ")
 
-add_executable(PAT move_ctor.cpp )
+add_executable(PAT BinaryTreeTraverse.cpp )
