@@ -72,5 +72,4 @@ int main()
 
 	const char arr[3] = {'B','C','J'};
 	cout << arr[j1] << ' ' << arr[j2] << endl;
-
 }
