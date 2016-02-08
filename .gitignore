@@ -1,4 +1,6 @@
 .idea
 *.txt
 *.out
+*.iml
+*.xml
 temp/
