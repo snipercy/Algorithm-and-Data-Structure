@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<string>
-#include<sstream>
 #include<iostream>
 
 class TreeNode
@@ -14,63 +13,81 @@ public:
 
 class traverse
 {
-private:
+public:
 	TreeNode* root;
 
 public:
+	traverse() {
+		root = NULL;
+	}
 	// 建立二叉树
 	// point data points to std::array<int,size>
-	void buildTree(TreeNode* &root, std::string& ss);
+	//TreeNode* buildTree(int*, int);
+	void buildTree(int*, int);
 
 	// 递归 前,中,后序遍历
-	void preOrderRecur(TreeNode* r);
-	void inOrderRecur(TreeNode* r);
-	void postOrderRecur(TreeNode* r);
+	void preOrderRecur(TreeNode*);
+	void inOrderRecur(TreeNode*);
+	void postOrderRecur(TreeNode*);
 
 	// 非递归 前,中,后序遍历
-	void preOrder(TreeNode* r);
-	void inOrder(TreeNode* r);
-	void postOrder(TreeNode* r);
+	void preOrder(TreeNode*);
+	void inOrder(TreeNode*);
+	void postOrder(TreeNode*);
 
 	// 层次遍历
-	void levelTraversal(TreeNode* r);
+	void levelTraversal(TreeNode*);
 
 	// "之"字形遍历
-	void zhiTraversal(TreeNode* r);
+	void zhiTraversal(TreeNode*);
 
 };
 
 // 建立二叉树
+// 通过字符串建立二叉树,eg:"123##67!",'#' means null
+//      1
+//     / \
+//    2   3
+//       / \
+//      6  7
 // hhhh
 void traverse::
-buildTree(TreeNode* &node, std::string& ss) {
-	// for debug
-	// std::cout << ss.str()<<std::endl;
-
-	char c;
-	static int idx = 0;
-
-#ifdef DEBUG
-	printf("idx: %*d",idx);
-#endif
-
-	if (idx >= ss.length() || (c = ss[idx++]) == '!')  {
-		return;
-	} else if (c == '#') {
-		node = NULL;
-	} else {
-		node = new TreeNode(c);
-		printf("data:%c\n", (node)->data);
-		buildTree((node)->lchild, ss);
-		buildTree((node)->rchild, ss);
+buildTree(int a[], int n)
+{
+	if (n<=0) {
+		root = NULL;
 	}
+
+	TreeNode **tree = new TreeNode*[n];
+
+	for(int i=0; i<n; i++) {
+		if (a[i]==0 ){
+			tree[i] = NULL;
+			continue;
+		}
+		tree[i] = new TreeNode(a[i]);
+	}
+	int pos=1;
+	for(int i=0; i<n && pos<n; i++) {
+		if (tree[i]){
+			tree[i]->lchild = tree[pos++];
+			if (pos<n){
+				tree[i]->rchild = tree[pos++];
+			}
+		}
+	}
+	root = tree[0];
+	printf("root:%p\n", root);
+
 }
 
 // 递归-前序遍历
 void traverse::
 preOrderRecur(TreeNode* r) {
-	if (r == NULL) return;
-	printf("%c ",r->data);
+	if (r == NULL) {
+		return;
+	}
+	printf("%d ",r->data);
 	preOrderRecur(r->lchild);
 	preOrderRecur(r->rchild);
 }
@@ -78,11 +95,23 @@ preOrderRecur(TreeNode* r) {
 // 递归-中序遍历
 void traverse::
 inOrderRecur(TreeNode* r) {
+	if (r == NULL) {
+		return;
+	}
+	inOrderRecur(r->lchild);
+	printf("%d ", r->data);
+	inOrderRecur(r->rchild);
 }
 
 // 递归-后序遍历
 void traverse::
 postOrderRecur(TreeNode* r) {
+	if (r == NULL) {
+		return;
+	}
+	postOrderRecur(r->lchild);
+	postOrderRecur(r->rchild);
+	printf("%d ", r->data);
 }
 
 // 非递归-前序遍历
@@ -98,7 +127,6 @@ inOrder(TreeNode* r) {
 // 非递归-后序遍历
 void traverse::
 postOrder(TreeNode* r) {
-	printf("postOrder\n");
 }
 
 // 层次遍历
@@ -113,16 +141,28 @@ zhiTraversal(TreeNode* r) {
 
 }
 
-int main(){
+int main() {
 
-	// test
+	//    1
+	//   / \
+	//  2   3
+	//     /
+	//    4
+	//     \
+	//     5
+	int a[] = {1,2,3,0,0,4,0,0,5};
+
 	traverse t;
-	std::string s("1#284#5!");
-	TreeNode* root = NULL;
-	t.buildTree(root, s);
-	printf("start traverse.\n");
-	t.preOrderRecur(root);
+	t.buildTree(a, sizeof(a)/sizeof(int));
 
-	printf("done\n");
+	t.preOrderRecur(t.root);
+	printf("\n");
+
+	t.inOrderRecur(t.root);
+	printf("\n");
+
+	t.postOrderRecur(t.root);
+	printf("\n");
+
 	return 0;
 }
