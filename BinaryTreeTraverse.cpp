@@ -260,7 +260,7 @@ levelTraversal(TreeNode* r) {
 // 与层次遍历中的nlast的意义正好相反.
 //
 
-inline void PrintLevelAndOri(int level, bool lr) {
+static inline void PrintLevelAndOri(int level, bool lr) {
     printf("level %d ", level);
     if (lr) {
         printf("from left  to right : ");
