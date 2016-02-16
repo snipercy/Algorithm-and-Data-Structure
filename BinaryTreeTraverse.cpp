@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<string>
 #include<iostream>
+#include<stack>
+#include<assert.h>
+#include<queue>
+#include<deque>
 
 class TreeNode
 {
@@ -14,15 +18,9 @@ public:
 class traverse
 {
 public:
-	TreeNode* root;
 
-public:
-	traverse() {
-		root = NULL;
-	}
-	// 建立二叉树
-	// point data points to std::array<int,size>
-	//TreeNode* buildTree(int*, int);
+	traverse() : _root(NULL){ }
+
 	void buildTree(int*, int);
 
 	// 递归 前,中,后序遍历
@@ -38,24 +36,27 @@ public:
 	// 层次遍历
 	void levelTraversal(TreeNode*);
 
-	// "之"字形遍历
-	void zhiTraversal(TreeNode*);
+    // 之字遍历
+    void printZigZag(TreeNode*);
 
+public:
+	TreeNode*_root;
 };
 
 // 建立二叉树
-// 通过字符串建立二叉树,eg:"123##67!",'#' means null
-//      1
-//     / \
-//    2   3
-//       / \
-//      6  7
-// hhhh
+// eg: int a[] = {1,2,3,0,0,4,0,0,5}; 0 means null
+//    1
+//   / \
+//  2   3
+//     /
+//    4
+//     \
+//     5
 void traverse::
 buildTree(int a[], int n)
 {
 	if (n<=0) {
-		root = NULL;
+		_root = NULL;
 	}
 
 	TreeNode **tree = new TreeNode*[n];
@@ -76,10 +77,29 @@ buildTree(int a[], int n)
 			}
 		}
 	}
-	root = tree[0];
-	printf("root:%p\n", root);
-
+	_root = tree[0];
 }
+
+/*
+void buildTree_1(TreeNode* &node, std::string& ss) {
+	// for debug
+	// std::cout << ss.str()<<std::endl;
+
+	char c;
+	static int idx = 0;
+
+	printf("idx: %d",idx);
+
+	if (idx >= ss.length() || (c = ss[idx++]) == '!')  {
+		return;
+	} else if (c == '#') {
+		node = NULL;
+	} else {
+		node = new TreeNode(c);
+		buildTree_1((node)->lchild, ss);
+		buildTree_1((node)->rchild, ss);
+	}
+}*/
 
 // 递归-前序遍历
 void traverse::
@@ -117,32 +137,188 @@ postOrderRecur(TreeNode* r) {
 // 非递归-前序遍历
 void traverse::
 preOrder(TreeNode* r) {
+	assert(r != NULL);
+	std::stack<TreeNode*> stk;
+	stk.push(r);
+	TreeNode* cur;
+	while(!stk.empty()) {
+		cur = stk.top();
+		stk.pop();
+		printf("%d ", cur->data);
+
+		if(cur->rchild) {
+			stk.push(cur->rchild);
+		}
+		if(cur->lchild) {
+			stk.push(cur->lchild);
+		}
+	}
+
 }
 
 // 非递归-中序遍历
 void traverse::
 inOrder(TreeNode* r) {
+	assert(r != NULL);
+	std::stack<TreeNode*> stk;
+	TreeNode* cur = r;
+	while(!stk.empty() || cur != NULL) {
+		if(cur != NULL) {
+			stk.push(cur);
+			cur = cur->lchild;
+		} else {
+			cur = stk.top();
+			stk.pop();
+			printf("%d ", cur->data);
+			cur = cur->rchild;
+		}
+	}
+	printf("\n");
 }
 
 // 非递归-后序遍历
 void traverse::
 postOrder(TreeNode* r) {
+	assert(r != NULL);
+	std::stack<TreeNode*> stk;
+	stk.push(r);
+	TreeNode* cur = NULL;
+	// 记录最近访问过的节点
+	TreeNode* pre = r;
+
+	while(!stk.empty()) {
+		cur = stk.top();
+		if(cur->lchild != NULL && cur->lchild != pre && cur->rchild != pre) {
+			stk.push(cur->lchild);
+		} else if (cur->rchild != NULL && cur->rchild != pre){
+			stk.push(cur->rchild);
+		} else {
+			cur = stk.top();
+			stk.pop();
+			printf("%d ", cur->data);
+			pre = cur;
+		}
+	}
+	printf("\n");
 }
 
-// 层次遍历
+// 层次遍历,
+//
+// **遍历时需要输出层号**，输出格式：
+// level 1 : 1
+// level 2 : 2 3
+// level 3 : 4
+// level 4 : 5
+//
+// last 记录每一层最右节点,当访问的节点等于last时，
+// 则需要换行.
+// nlast 下一层的最右节点,即最新加入队列的节点，
+// 用于更新last节点.
+//
 void traverse::
 levelTraversal(TreeNode* r) {
+	assert(r != NULL);
+	std::queue<TreeNode*> Queue;
+	Queue.push(r);
+	TreeNode* cur;
+	TreeNode* nlast;
+	TreeNode* last = r;
+    int level = 1;
 
+    printf("level %d : ", level++);
+	while(!Queue.empty()) {
+		cur = Queue.front();
+		Queue.pop();
+		printf("%d ", cur->data);
+		if(cur->lchild != NULL) {
+			Queue.push(cur->lchild);
+            nlast = cur->lchild;
+		}
+		if(cur->rchild != NULL) {
+			Queue.push(cur->rchild);
+            nlast = cur->rchild;
+		}
+        if(cur == last && !Queue.empty()){
+            printf("\nlevel %d : ", level++);
+            last = nlast;
+        }
+	}
+    printf("\n");
 }
 
-// "之"字形遍历
-void traverse::
-zhiTraversal(TreeNode* r) {
+// ZigZag Print
+//
+// 之字遍历,**遍历时需要输出层号**，输出格式：
+// level 1 from left  to right : 1
+// level 2 from right to left  : 3 2
+// level 3 from left  to right : 4
+// level 4 from right to left  : 5
+//
+// last: 记录每一层最后访问的节点,当访问的节点等于
+// last时，则需要换行.
+// nlast: 下一层的最后访问的节点,即第一个加入队列的节点，
+// 与层次遍历中的nlast的意义正好相反.
+//
 
+inline void PrintLevelAndOri(int level, bool lr) {
+    printf("level %d ", level);
+    if (lr) {
+        printf("from left  to right : ");
+    } else {
+        printf("from right to left  : ");
+    }
+}
+
+void traverse::
+printZigZag(TreeNode* r) {
+    assert(r != NULL);
+    std::deque<TreeNode*> Deque;
+    Deque.push_front(r);
+    TreeNode* cur = NULL;
+    TreeNode* last = r;
+    TreeNode* nlast = NULL; // 下一行最后节点
+    int level = 1;
+    bool lr = true;
+
+    PrintLevelAndOri(level++, lr);
+    while(!Deque.empty()) {
+        if (lr) {
+            cur = Deque.front();
+            Deque.pop_front();
+            if (cur->lchild) {
+                Deque.push_back(cur->lchild);
+                nlast = nlast == NULL ? cur->lchild : nlast;
+            }
+            if (cur->rchild) {
+                Deque.push_back(cur->rchild);
+                nlast = nlast == NULL ? cur->rchild : nlast;
+            }
+        } else {
+            cur = Deque.back();
+            Deque.pop_back();
+            if (cur->rchild) {
+                Deque.push_front(cur->rchild);
+                nlast = nlast == NULL ? cur->rchild : nlast;
+            }
+            if (cur->lchild) {
+                Deque.push_front(cur->lchild);
+                nlast = nlast == NULL ? cur->lchild : nlast;
+            }
+        }
+
+        printf("%d ", cur->data);
+        if (cur == last && !Deque.empty()) {
+            lr = !lr;
+            last = nlast;
+            nlast = NULL;
+            printf("\n");
+            PrintLevelAndOri(level++, lr);
+        }
+    }
 }
 
 int main() {
-
+	traverse t;
 	//    1
 	//   / \
 	//  2   3
@@ -151,18 +327,10 @@ int main() {
 	//     \
 	//     5
 	int a[] = {1,2,3,0,0,4,0,0,5};
-
-	traverse t;
 	t.buildTree(a, sizeof(a)/sizeof(int));
 
-	t.preOrderRecur(t.root);
-	printf("\n");
-
-	t.inOrderRecur(t.root);
-	printf("\n");
-
-	t.postOrderRecur(t.root);
-	printf("\n");
+	t.printZigZag(t._root);
 
 	return 0;
 }
+
