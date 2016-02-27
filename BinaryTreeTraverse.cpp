@@ -8,39 +8,39 @@
 
 class TreeNode
 {
-public:
-	char data;
-	TreeNode* lchild;
-	TreeNode* rchild;
-	TreeNode(char d) : data(d), lchild(nullptr), rchild(nullptr) { }
+    public:
+        char data;
+        TreeNode* lchild;
+        TreeNode* rchild;
+        TreeNode(char d) : data(d), lchild(nullptr), rchild(nullptr) { }
 };
 
 class traverse
 {
-public:
+    public:
 
-	traverse() : _root(NULL){ }
+        traverse() : _root(NULL){ }
 
-	void buildTree(int*, int);
+        void buildTree(int*, int);
 
-	// 递归 前,中,后序遍历
-	void preOrderRecur(TreeNode*);
-	void inOrderRecur(TreeNode*);
-	void postOrderRecur(TreeNode*);
+        // 递归 前,中,后序遍历
+        void preOrderRecur(TreeNode*);
+        void inOrderRecur(TreeNode*);
+        void postOrderRecur(TreeNode*);
 
-	// 非递归 前,中,后序遍历
-	void preOrder(TreeNode*);
-	void inOrder(TreeNode*);
-	void postOrder(TreeNode*);
+        // 非递归 前,中,后序遍历
+        void preOrder(TreeNode*);
+        void inOrder(TreeNode*);
+        void postOrder(TreeNode*);
 
-	// 层次遍历
-	void levelTraversal(TreeNode*);
+        // 层次遍历
+        void levelTraversal(TreeNode*);
 
-    // 之字遍历
-    void printZigZag(TreeNode*);
+        // 之字遍历
+        void printZigZag(TreeNode*);
 
-public:
-	TreeNode*_root;
+    public:
+        TreeNode*_root;
 };
 
 // 建立二叉树
@@ -55,151 +55,152 @@ public:
 void traverse::
 buildTree(int a[], int n)
 {
-	if (n<=0) {
-		_root = NULL;
-	}
+    if (n<=0) {
+        _root = NULL;
+    }
 
-	TreeNode **tree = new TreeNode*[n];
+    TreeNode **tree = new TreeNode*[n];
 
-	for(int i=0; i<n; i++) {
-		if (a[i]==0 ){
-			tree[i] = NULL;
-			continue;
-		}
-		tree[i] = new TreeNode(a[i]);
-	}
-	int pos=1;
-	for(int i=0; i<n && pos<n; i++) {
-		if (tree[i]){
-			tree[i]->lchild = tree[pos++];
-			if (pos<n){
-				tree[i]->rchild = tree[pos++];
-			}
-		}
-	}
-	_root = tree[0];
+    for(int i=0; i<n; i++) {
+        if (a[i]==0 ){
+            tree[i] = NULL;
+            continue;
+        }
+        tree[i] = new TreeNode(a[i]);
+    }
+    int pos=1;
+    for(int i=0; i<n && pos<n; i++) {
+        if (tree[i]){
+            tree[i]->lchild = tree[pos++];
+            if (pos<n){
+                tree[i]->rchild = tree[pos++];
+            }
+        }
+    }
+    _root = tree[0];
 }
 
 /*
-void buildTree_1(TreeNode* &node, std::string& ss) {
-	// for debug
-	// std::cout << ss.str()<<std::endl;
+   void buildTree_1(TreeNode* &node, std::string& ss) {
+// for debug
+// std::cout << ss.str()<<std::endl;
 
-	char c;
-	static int idx = 0;
+char c;
+static int idx = 0;
 
-	printf("idx: %d",idx);
+printf("idx: %d",idx);
 
-	if (idx >= ss.length() || (c = ss[idx++]) == '!')  {
-		return;
-	} else if (c == '#') {
-		node = NULL;
-	} else {
-		node = new TreeNode(c);
-		buildTree_1((node)->lchild, ss);
-		buildTree_1((node)->rchild, ss);
-	}
-}*/
+if (idx >= ss.length() || (c = ss[idx++]) == '!')  {
+return;
+} else if (c == '#') {
+node = NULL;
+} else {
+node = new TreeNode(c);
+buildTree_1((node)->lchild, ss);
+buildTree_1((node)->rchild, ss);
+}
+}
+*/
 
 // 递归-前序遍历
 void traverse::
 preOrderRecur(TreeNode* r) {
-	if (r == NULL) {
-		return;
-	}
-	printf("%d ",r->data);
-	preOrderRecur(r->lchild);
-	preOrderRecur(r->rchild);
+    if (r == NULL) {
+        return;
+    }
+    printf("%d ",r->data);
+    preOrderRecur(r->lchild);
+    preOrderRecur(r->rchild);
 }
 
 // 递归-中序遍历
 void traverse::
 inOrderRecur(TreeNode* r) {
-	if (r == NULL) {
-		return;
-	}
-	inOrderRecur(r->lchild);
-	printf("%d ", r->data);
-	inOrderRecur(r->rchild);
+    if (r == NULL) {
+        return;
+    }
+    inOrderRecur(r->lchild);
+    printf("%d ", r->data);
+    inOrderRecur(r->rchild);
 }
 
 // 递归-后序遍历
 void traverse::
 postOrderRecur(TreeNode* r) {
-	if (r == NULL) {
-		return;
-	}
-	postOrderRecur(r->lchild);
-	postOrderRecur(r->rchild);
-	printf("%d ", r->data);
+    if (r == NULL) {
+        return;
+    }
+    postOrderRecur(r->lchild);
+    postOrderRecur(r->rchild);
+    printf("%d ", r->data);
 }
 
 // 非递归-前序遍历
 void traverse::
 preOrder(TreeNode* r) {
-	assert(r != NULL);
-	std::stack<TreeNode*> stk;
-	stk.push(r);
-	TreeNode* cur;
-	while(!stk.empty()) {
-		cur = stk.top();
-		stk.pop();
-		printf("%d ", cur->data);
+    assert(r != NULL);
+    std::stack<TreeNode*> stk;
+    stk.push(r);
+    TreeNode* cur;
+    while(!stk.empty()) {
+        cur = stk.top();
+        stk.pop();
+        printf("%d ", cur->data);
 
-		if(cur->rchild) {
-			stk.push(cur->rchild);
-		}
-		if(cur->lchild) {
-			stk.push(cur->lchild);
-		}
-	}
+        if(cur->rchild) {
+            stk.push(cur->rchild);
+        }
+        if(cur->lchild) {
+            stk.push(cur->lchild);
+        }
+    }
 
 }
 
 // 非递归-中序遍历
 void traverse::
 inOrder(TreeNode* r) {
-	assert(r != NULL);
-	std::stack<TreeNode*> stk;
-	TreeNode* cur = r;
-	while(!stk.empty() || cur != NULL) {
-		if(cur != NULL) {
-			stk.push(cur);
-			cur = cur->lchild;
-		} else {
-			cur = stk.top();
-			stk.pop();
-			printf("%d ", cur->data);
-			cur = cur->rchild;
-		}
-	}
-	printf("\n");
+    assert(r != NULL);
+    std::stack<TreeNode*> stk;
+    TreeNode* cur = r;
+    while(!stk.empty() || cur != NULL) {
+        if(cur != NULL) {
+            stk.push(cur);
+            cur = cur->lchild;
+        } else {
+            cur = stk.top();
+            stk.pop();
+            printf("%d ", cur->data);
+            cur = cur->rchild;
+        }
+    }
+    printf("\n");
 }
 
 // 非递归-后序遍历
 void traverse::
 postOrder(TreeNode* r) {
-	assert(r != NULL);
-	std::stack<TreeNode*> stk;
-	stk.push(r);
-	TreeNode* cur = NULL;
-	// 记录最近访问过的节点
-	TreeNode* pre = r;
+    assert(r != NULL);
+    std::stack<TreeNode*> stk;
+    stk.push(r);
+    TreeNode* cur = NULL;
+    // 记录最近访问过的节点
+    TreeNode* pre = r;
 
-	while(!stk.empty()) {
-		cur = stk.top();
-		if(cur->lchild != NULL && cur->lchild != pre && cur->rchild != pre) {
-			stk.push(cur->lchild);
-		} else if (cur->rchild != NULL && cur->rchild != pre){
-			stk.push(cur->rchild);
-		} else {
-			cur = stk.top();
-			stk.pop();
-			printf("%d ", cur->data);
-			pre = cur;
-		}
-	}
-	printf("\n");
+    while(!stk.empty()) {
+        cur = stk.top();
+        if(cur->lchild != NULL && cur->lchild != pre && cur->rchild != pre) {
+            stk.push(cur->lchild);
+        } else if (cur->rchild != NULL && cur->rchild != pre){
+            stk.push(cur->rchild);
+        } else {
+            cur = stk.top();
+            stk.pop();
+            printf("%d ", cur->data);
+            pre = cur;
+        }
+    }
+    printf("\n");
 }
 
 // 层次遍历,
@@ -217,32 +218,32 @@ postOrder(TreeNode* r) {
 //
 void traverse::
 levelTraversal(TreeNode* r) {
-	assert(r != NULL);
-	std::queue<TreeNode*> Queue;
-	Queue.push(r);
-	TreeNode* cur;
-	TreeNode* nlast;
-	TreeNode* last = r;
+    assert(r != NULL);
+    std::queue<TreeNode*> Queue;
+    Queue.push(r);
+    TreeNode* cur;
+    TreeNode* nlast;
+    TreeNode* last = r;
     int level = 1;
 
     printf("level %d : ", level++);
-	while(!Queue.empty()) {
-		cur = Queue.front();
-		Queue.pop();
-		printf("%d ", cur->data);
-		if(cur->lchild != NULL) {
-			Queue.push(cur->lchild);
+    while(!Queue.empty()) {
+        cur = Queue.front();
+        Queue.pop();
+        printf("%d ", cur->data);
+        if(cur->lchild != NULL) {
+            Queue.push(cur->lchild);
             nlast = cur->lchild;
-		}
-		if(cur->rchild != NULL) {
-			Queue.push(cur->rchild);
+        }
+        if(cur->rchild != NULL) {
+            Queue.push(cur->rchild);
             nlast = cur->rchild;
-		}
+        }
         if(cur == last && !Queue.empty()){
             printf("\nlevel %d : ", level++);
             last = nlast;
         }
-	}
+    }
     printf("\n");
 }
 
@@ -278,7 +279,7 @@ printZigZag(TreeNode* r) {
     TreeNode* last = r;
     TreeNode* nlast = NULL; // 下一行最后节点
     int level = 1;
-    bool lr = true;
+    bool lr = true;         // lr：从左往右遍历
 
     PrintLevelAndOri(level++, lr);
     while(!Deque.empty()) {
@@ -318,19 +319,19 @@ printZigZag(TreeNode* r) {
 }
 
 int main() {
-	traverse t;
-	//    1
-	//   / \
-	//  2   3
-	//     /
-	//    4
-	//     \
-	//     5
-	int a[] = {1,2,3,0,0,4,0,0,5};
-	t.buildTree(a, sizeof(a)/sizeof(int));
+    traverse t;
+    //    1
+    //   / \
+    //  2   3
+    //     /
+    //    4
+    //     \
+    //     5
+    int a[] = {1,2,3,0,0,4,0,0,5};
+    t.buildTree(a, sizeof(a)/sizeof(int));
 
-	t.printZigZag(t._root);
+    t.printZigZag(t._root);
 
-	return 0;
+    return 0;
 }
 

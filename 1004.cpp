@@ -42,7 +42,7 @@ int main(){
 	int week_idx = c1 - 'A';
 	printf("%s ",week[week_idx].c_str());
 
-	
+
 	// c2 transform to hour
 	string hour;
 	if (c2 >= '0' && c2 <= '9'){
@@ -51,7 +51,7 @@ int main(){
 	else{
 		printf("%d:", c2 - 'A'+10);
 	}
-	
+
 	// get minute
 	int minute;
 	int len3 = str3.length();
@@ -68,7 +68,7 @@ int main(){
 	}
 	else
 		printf("%d\n", i);
-	
+
 	system("pause");
 
 	return 0;
