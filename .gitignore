@@ -1,6 +1,7 @@
 .idea
 *.txt
 *.out
+*.out.*
 *.iml
 *.xml
 temp/
