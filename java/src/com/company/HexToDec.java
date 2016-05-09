@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 /**
  * 进制转换
