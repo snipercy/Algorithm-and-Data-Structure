@@ -5,4 +5,6 @@
 *.iml
 *.xml
 CMakeLists.txt
+a.out.dSYM/
+java-algorithms-implementation/
 temp/
