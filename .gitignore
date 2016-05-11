@@ -10,3 +10,4 @@ java/src/untitled/
 java/src/out/
 java-algorithms-implementation/
 temp/
+*.class
