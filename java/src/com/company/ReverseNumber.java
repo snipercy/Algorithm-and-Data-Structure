@@ -20,6 +20,5 @@ public class ReverseNumber {
 
             System.out.println(res);
         }
-
     }
 }
