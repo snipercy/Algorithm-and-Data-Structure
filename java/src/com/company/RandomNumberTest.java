@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RandomNumberTest {
-   RandomNumber obj =  new RandomNumber();
+
+    RandomNumber obj = new RandomNumber();
 
     @Test
     public void rand1to5() throws Exception {
@@ -29,16 +30,28 @@ public class RandomNumberTest {
     }
 
     @Test
-    public void rand1top() throws Exception {
+    public void rand01p() throws Exception {
         int times = 10;
         while (times-- > 0) {
-            int randnum = obj.rand0toP(0.83);
+            int randnum = obj.rand01p();
             assertTrue(randnum == 0 || randnum == 1);
         }
     }
 
-
-
+    @Test
+    public void rand01() throws Exception {
+        int times = 10000;
+        int a = 0;
+        int b = 0;
+        while (times-- > 0) {
+            if (obj.rand01() == 1) {
+                a++;
+            } else{
+                b++;
+            }
+        }
+        System.out.println("a= " + a + "\nb = " + b);
+    }
 
 
 }
